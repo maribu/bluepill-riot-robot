@@ -1,0 +1,11 @@
+USEMODULE += boards_common_blxxxpill
+ifneq (,$(filter netdev_default,$(USEMODULE)))
+  USEMODULE += nrf24l01p_ng
+endif
+
+ifneq (,$(filter saul_default,$(USEMODULE)))
+  USEMODULE += servo
+endif
+
+include $(RIOTBOARD)/common/blxxxpill/Makefile.dep
+include $(RIOTBOARD)/common/makefiles/stdio_cdc_acm.dep.mk
