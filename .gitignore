@@ -1,3 +1,5 @@
-bin
-*.swp
 *.swo
+*.swp
+.cache
+bin
+compile_commands.json
