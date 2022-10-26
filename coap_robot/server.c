@@ -18,10 +18,10 @@ static ssize_t _servo_handler(coap_pkt_t* pdu, uint8_t *buf, size_t len, coap_re
 static uint8_t servo_states[ARRAY_SIZE(servos)];
 
 static const coap_resource_t _resources[] = {
-    { "/arm/rotate", COAP_GET | COAP_PUT, _servo_handler, &servos[0] },
-    { "/arm/extend", COAP_GET | COAP_PUT, _servo_handler, &servos[1] },
-    { "/arm/lift", COAP_GET | COAP_PUT, _servo_handler, &servos[2] },
-    { "/arm/grab", COAP_GET | COAP_PUT, _servo_handler, &servos[3] },
+    { "/arm/rotate", COAP_GET | COAP_POST | COAP_PUT, _servo_handler, &servos[0] },
+    { "/arm/extend", COAP_GET | COAP_POST | COAP_PUT, _servo_handler, &servos[1] },
+    { "/arm/lift", COAP_GET | COAP_POST | COAP_PUT, _servo_handler, &servos[2] },
+    { "/arm/grab", COAP_GET | COAP_POST | COAP_PUT, _servo_handler, &servos[3] },
 };
 
 static gcoap_listener_t _listener = {
@@ -64,10 +64,34 @@ static ssize_t _servo_handler(coap_pkt_t* pdu, uint8_t *buf, size_t len, coap_re
         else {
             return gcoap_response(pdu, buf, len, COAP_CODE_BAD_REQUEST);
         }
+
+    case COAP_POST:
+        /* convert the payload to an integer and update the internal
+           value */
+        if (pdu->payload_len <= 3) {
+            char payload[4] = { 0 };
+            memcpy(payload, (char *)pdu->payload, pdu->payload_len);
+            int32_t offset = strtol(payload, NULL, 10);
+            int32_t pos = servo_states[idx];
+            pos += offset;
+            if (pos < 0) {
+                pos = 0;
+            }
+            if (pos > UINT8_MAX) {
+                pos = UINT8_MAX;
+            }
+            servo_states[idx] = pos;
+            servo_set(servo, pos);
+            return gcoap_response(pdu, buf, len, COAP_CODE_CHANGED);
+        }
+        else {
+            return gcoap_response(pdu, buf, len, COAP_CODE_BAD_REQUEST);
+        }
     }
 
     return 0;
 }
+
 void server_init(void)
 {
     gcoap_register_listener(&_listener);

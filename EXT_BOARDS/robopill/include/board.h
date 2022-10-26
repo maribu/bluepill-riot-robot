@@ -55,6 +55,7 @@ extern "C" {
 #define NRF24L01P_NG_PARAM_CS               GPIO_PIN(PORT_B, 12)
 #define NRF24L01P_NG_PARAM_CE               GPIO_PIN(PORT_C, 14)
 #define NRF24L01P_NG_PARAM_IRQ              GPIO_PIN(PORT_A, 15)
+#define NRF24L01P_NG_PARAM_SPI_CLK          SPI_CLK_1MHZ
 
 #ifdef __cplusplus
 }

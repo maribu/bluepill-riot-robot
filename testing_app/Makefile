@@ -1,5 +1,5 @@
 APPLICATION := testing_app
-BOARD := robopill
+BOARD := robodongle
 RIOTBASE := $(CURDIR)/../RIOT
 EXTERNAL_BOARD_DIRS := $(CURDIR)/../EXT_BOARDS
 DEVELHELP ?= 1
