@@ -1,0 +1,6 @@
+/**
+@defgroup    boards_robotdongle nRF52840-Dongle with robot breakout board
+@ingroup     boards
+@brief       Support for the nRF52840-Dongle with Robot breakout board
+
+ */
